@@ -13,13 +13,12 @@
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
 
-
     <!-- Handling report web service -->
 
     <jaxws:endpoint id="jax-ws.http" implementor="#handlingReportService" address="/RegisterEvent"/>
 
     <bean id="handlingReportService" class="se.citerus.dddsample.interfaces.handling.ws.HandlingReportServiceImpl">
-        <property name="applicationEvents" ref="applicationEvents"/>
+        <constructor-arg index="0" ref="applicationEvents"/>
     </bean>
 
 
@@ -32,33 +31,33 @@
     <task:scheduler id="myScheduler" pool-size="10"/>
 
     <bean id="uploadDirectoryScanner" class="se.citerus.dddsample.interfaces.handling.file.UploadDirectoryScanner">
-        <property name="uploadDirectory" value="/tmp/upload"/>
-        <property name="parseFailureDirectory" value="/tmp/failed"/>
-        <property name="applicationEvents" ref="applicationEvents"/>
+        <constructor-arg index="0" value="/tmp/upload"/>
+        <constructor-arg index="1" value="/tmp/failed"/>
+        <constructor-arg index="2" ref="applicationEvents"/>
     </bean>
 
     <bean id="handlingReportConsumptionSupport" class="se.citerus.dddsample.interfaces.handling.HandlingReportParser"/>
 
     <bean id="bookingServiceFacade"
           class="se.citerus.dddsample.interfaces.booking.facade.internal.BookingServiceFacadeImpl">
-        <property name="bookingService" ref="bookingService"/>
-        <property name="cargoRepository" ref="cargoRepository"/>
-        <property name="locationRepository" ref="locationRepository"/>
-        <property name="voyageRepository" ref="voyageRepository"/>
+        <constructor-arg index="0" ref="bookingService"/>
+        <constructor-arg index="1" ref="locationRepository"/>
+        <constructor-arg index="2" ref="cargoRepository"/>
+        <constructor-arg index="3" ref="voyageRepository"/>
     </bean>
 
     <bean id="trackCommandValidator" class="se.citerus.dddsample.interfaces.tracking.TrackCommandValidator"/>
 
     <bean class="se.citerus.dddsample.interfaces.booking.web.CargoAdminController">
-        <property name="bookingServiceFacade" ref="bookingServiceFacade"/>
+        <constructor-arg index="0" ref="bookingServiceFacade"/>
     </bean>
 
     <!-- Tracking web application support -->
 
     <bean class="se.citerus.dddsample.interfaces.tracking.CargoTrackingController">
-        <property name="cargoRepository" ref="cargoRepository"/>
-        <property name="handlingEventRepository" ref="handlingEventRepository"/>
-        <property name="messageSource" ref="messageSource"/>
+        <constructor-arg index="0" ref="cargoRepository"/>
+        <constructor-arg index="1" ref="handlingEventRepository"/>
+        <constructor-arg index="2" ref="messageSource"/>
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

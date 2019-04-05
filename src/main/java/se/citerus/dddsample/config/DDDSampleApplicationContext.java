@@ -30,58 +30,37 @@ import se.citerus.dddsample.infrastructure.routing.ExternalRoutingService;
         "classpath:context-infrastructure-persistence.xml"})
 public class DDDSampleApplicationContext {
 
-    @Autowired
-    CargoRepository cargoRepository;
-
-    @Autowired
-    LocationRepository locationRepository;
-
-    @Autowired
-    VoyageRepository voyageRepository;
-
-    @Autowired
-    GraphTraversalService graphTraversalService;
-
-    @Autowired
-    RoutingService routingService;
-
-    @Autowired
-    HandlingEventFactory handlingEventFactory;
-
-    @Autowired
-    HandlingEventRepository handlingEventRepository;
-
-    @Autowired
-    ApplicationEvents applicationEvents;
-
-    @Autowired
-    PlatformTransactionManager platformTransactionManager;
-
-    @Autowired
-    SessionFactory sessionFactory;
-
     @Bean
-    public BookingService bookingService() {
+    public BookingService bookingService(final CargoRepository cargoRepository, final LocationRepository locationRepository,
+                                         final RoutingService routingService) {
         return new BookingServiceImpl(cargoRepository, locationRepository, routingService);
     }
 
     @Bean
-    public CargoInspectionService cargoInspectionService() {
+    public CargoInspectionService cargoInspectionService(final ApplicationEvents applicationEvents,
+                                                         final CargoRepository cargoRepository,
+                                                         final HandlingEventRepository handlingEventRepository) {
         return new CargoInspectionServiceImpl(applicationEvents, cargoRepository, handlingEventRepository);
     }
 
     @Bean
-    public HandlingEventService handlingEventService() {
+    public HandlingEventService handlingEventService(final HandlingEventRepository handlingEventRepository,
+                                                     final ApplicationEvents applicationEvents,
+                                                     final HandlingEventFactory handlingEventFactory) {
         return new HandlingEventServiceImpl(handlingEventRepository, applicationEvents, handlingEventFactory);
     }
 
     @Bean
-    public HandlingEventFactory handlingEventFactory() {
+    public HandlingEventFactory handlingEventFactory(final CargoRepository cargoRepository,
+                                                     final VoyageRepository voyageRepository,
+                                                     final LocationRepository locationRepository) {
         return new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
     }
 
     @Bean
-    public RoutingService routingService() {
+    public RoutingService routingService(final GraphTraversalService graphTraversalService,
+                                         final LocationRepository locationRepository,
+                                         final VoyageRepository voyageRepository) {
         ExternalRoutingService routingService = new ExternalRoutingService();
         routingService.setGraphTraversalService(graphTraversalService);
         routingService.setLocationRepository(locationRepository);
@@ -90,7 +69,12 @@ public class DDDSampleApplicationContext {
     }
 
     @Bean
-    public SampleDataGenerator sampleDataGenerator() {
+    public SampleDataGenerator sampleDataGenerator(final PlatformTransactionManager platformTransactionManager,
+                                                   final SessionFactory sessionFactory,
+                                                   final CargoRepository cargoRepository,
+                                                   final VoyageRepository voyageRepository,
+                                                   final LocationRepository locationRepository,
+                                                   final HandlingEventRepository handlingEventRepository) {
         return new SampleDataGenerator(platformTransactionManager, sessionFactory, cargoRepository, voyageRepository, locationRepository, handlingEventRepository);
     }
 }

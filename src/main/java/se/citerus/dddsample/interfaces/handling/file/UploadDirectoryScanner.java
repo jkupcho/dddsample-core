@@ -28,11 +28,19 @@ import java.util.TimerTask;
  */
 public class UploadDirectoryScanner extends TimerTask implements InitializingBean {
 
-  private File uploadDirectory;
-  private File parseFailureDirectory;
+  private final File uploadDirectory;
+  private final File parseFailureDirectory;
+  private final ApplicationEvents applicationEvents;
+
+  public UploadDirectoryScanner(File uploadDirectory,
+                                File parseFailureDirectory,
+                                ApplicationEvents applicationEvents) {
+    this.uploadDirectory = uploadDirectory;
+    this.parseFailureDirectory = parseFailureDirectory;
+    this.applicationEvents = applicationEvents;
+  }
 
   private final static Log logger = LogFactory.getLog(UploadDirectoryScanner.class);
-  private ApplicationEvents applicationEvents;
 
   @Override
   public void run() {
@@ -129,15 +137,4 @@ public class UploadDirectoryScanner extends TimerTask implements InitializingBea
     }
   }
 
-  public void setUploadDirectory(File uploadDirectory) {
-    this.uploadDirectory = uploadDirectory;
-  }
-
-  public void setParseFailureDirectory(File parseFailureDirectory) {
-    this.parseFailureDirectory = parseFailureDirectory;
-  }
-
-  public void setApplicationEvents(ApplicationEvents applicationEvents) {
-    this.applicationEvents = applicationEvents;
-  }
 }

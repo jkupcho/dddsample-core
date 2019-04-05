@@ -36,7 +36,11 @@ import java.util.Map;
 @RequestMapping("/admin")
 public final class CargoAdminController {
 
-    private BookingServiceFacade bookingServiceFacade;
+    private final BookingServiceFacade bookingServiceFacade;
+
+    public CargoAdminController(BookingServiceFacade bookingServiceFacade) {
+        this.bookingServiceFacade = bookingServiceFacade;
+    }
 
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -138,7 +142,4 @@ public final class CargoAdminController {
         response.sendRedirect("show.html?trackingId=" + trackingId);
     }
 
-    public void setBookingServiceFacade(BookingServiceFacade bookingServiceFacade) {
-        this.bookingServiceFacade = bookingServiceFacade;
-    }
 }

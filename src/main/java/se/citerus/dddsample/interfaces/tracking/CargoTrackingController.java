@@ -35,9 +35,16 @@ import java.util.Map;
 @RequestMapping("/track")
 public final class CargoTrackingController {
 
-    private CargoRepository cargoRepository;
-    private HandlingEventRepository handlingEventRepository;
-    private MessageSource messageSource;
+    private final CargoRepository cargoRepository;
+    private final HandlingEventRepository handlingEventRepository;
+    private final MessageSource messageSource;
+
+    public CargoTrackingController(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository,
+                                   MessageSource messageSource) {
+        this.cargoRepository = cargoRepository;
+        this.handlingEventRepository = handlingEventRepository;
+        this.messageSource = messageSource;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String get(final Map<String, Object> model) {
@@ -63,18 +70,6 @@ public final class CargoTrackingController {
             bindingResult.rejectValue("trackingId", "cargo.unknown_id", new Object[]{command.getTrackingId()}, "Unknown tracking id");
         }
         return "track";
-    }
-
-    public void setCargoRepository(CargoRepository cargoRepository) {
-        this.cargoRepository = cargoRepository;
-    }
-
-    public void setHandlingEventRepository(HandlingEventRepository handlingEventRepository) {
-        this.handlingEventRepository = handlingEventRepository;
-    }
-
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
     }
 
 }

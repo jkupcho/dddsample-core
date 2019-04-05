@@ -19,14 +19,25 @@ import javax.jms.Session;
  */
 public final class JmsApplicationEventsImpl implements ApplicationEvents {
 
-  private JmsOperations jmsOperations;
-  private Destination cargoHandledQueue;
-  private Destination misdirectedCargoQueue;
-  private Destination deliveredCargoQueue;
-  private Destination rejectedRegistrationAttemptsQueue;
-  private Destination handlingEventQueue;
+  private final JmsOperations jmsOperations;
+  private final Destination cargoHandledQueue;
+  private final Destination misdirectedCargoQueue;
+  private final Destination deliveredCargoQueue;
+  private final Destination rejectedRegistrationAttemptsQueue;
+  private final Destination handlingEventQueue;
 
   private static final Log logger = LogFactory.getLog(JmsApplicationEventsImpl.class);
+
+  public JmsApplicationEventsImpl(JmsOperations jmsOperations, Destination cargoHandledQueue,
+                                  Destination misdirectedCargoQueue, Destination deliveredCargoQueue,
+                                  Destination rejectedRegistrationAttemptsQueue, Destination handlingEventQueue) {
+    this.jmsOperations = jmsOperations;
+    this.cargoHandledQueue = cargoHandledQueue;
+    this.misdirectedCargoQueue = misdirectedCargoQueue;
+    this.deliveredCargoQueue = deliveredCargoQueue;
+    this.rejectedRegistrationAttemptsQueue = rejectedRegistrationAttemptsQueue;
+    this.handlingEventQueue = handlingEventQueue;
+  }
 
   @Override
   public void cargoWasHandled(final HandlingEvent event) {
@@ -69,27 +80,4 @@ public final class JmsApplicationEventsImpl implements ApplicationEvents {
     });
   }
 
-  public void setJmsOperations(JmsOperations jmsOperations) {
-    this.jmsOperations = jmsOperations;
-  }
-
-  public void setCargoHandledQueue(Destination destination) {
-    this.cargoHandledQueue = destination;
-  }
-
-  public void setMisdirectedCargoQueue(Destination destination) {
-    this.misdirectedCargoQueue = destination;
-  }
-
-  public void setDeliveredCargoQueue(Destination destination) {
-    this.deliveredCargoQueue = destination;
-  }
-
-  public void setRejectedRegistrationAttemptsQueue(Destination destination) {
-    this.rejectedRegistrationAttemptsQueue = destination;
-  }
-
-  public void setHandlingEventQueue(Destination destination) {
-    this.handlingEventQueue = destination;
-  }
 }

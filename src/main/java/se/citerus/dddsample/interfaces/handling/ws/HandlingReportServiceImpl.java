@@ -29,8 +29,12 @@ import java.util.List;
 @WebService(endpointInterface = "com.aggregator.HandlingReportService")
 public class HandlingReportServiceImpl implements HandlingReportService {
 
-  private ApplicationEvents applicationEvents;
+  private final ApplicationEvents applicationEvents;
   private final static Log logger = LogFactory.getLog(HandlingReportServiceImpl.class);
+
+  public HandlingReportServiceImpl(ApplicationEvents applicationEvents) {
+    this.applicationEvents = applicationEvents;
+  }
 
   @Override
   public void submitReport(@WebParam(name = "arg0", targetNamespace = "") HandlingReport handlingReport) throws HandlingReportErrors_Exception {
@@ -58,10 +62,6 @@ public class HandlingReportServiceImpl implements HandlingReportService {
       }
     }
 
-  }
-
-  public void setApplicationEvents(ApplicationEvents applicationEvents) {
-    this.applicationEvents = applicationEvents;
   }
 
 }

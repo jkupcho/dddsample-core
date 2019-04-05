@@ -8,6 +8,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -26,9 +28,13 @@ import se.citerus.dddsample.infrastructure.persistence.inmemory.HandlingEventRep
 @WebAppConfiguration
 @ContextConfiguration(classes = CargoTrackingControllerTest.TestConfiguration.class)
 public class CargoTrackingControllerTest {
+
     public static class TestConfiguration {
 
     }
+
+    @Autowired
+    private MessageSource messageSource;
 
     private MockMvc mockMvc;
 
@@ -38,9 +44,7 @@ public class CargoTrackingControllerTest {
         cargoRepository.setHandlingEventRepository(new HandlingEventRepositoryInMem());
         cargoRepository.init();
 
-        CargoTrackingController controller = new CargoTrackingController();
-        controller.setCargoRepository(cargoRepository);
-        controller.setHandlingEventRepository(new HandlingEventRepositoryInMem());
+        CargoTrackingController controller = new CargoTrackingController(cargoRepository, new HandlingEventRepositoryInMem(), messageSource);
 
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/jsp/");
